@@ -3,14 +3,18 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
+    "prestart": "if [ ! -d \"dist\" ]; then npm run build; fi",
     "start": "tsx server/index.ts",
-    "postinstall": "prisma generate && npm run build",
+    "postinstall": "prisma generate",
     "server": "tsx server/index.ts"
   },
   "dependencies": {
