@@ -164,4 +164,4 @@ app.notFound((c) => {
 
 const port = Number(process.env.PORT) || 3000;
 console.log(`[SOVEREIGN_ENGINE]: Deploying on port ${port}...`);
-serve({ fetch: app.fetch, port });
+serve({ fetch: app.fetch, port, hostname: '0.0.0.0' });
