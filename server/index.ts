@@ -34,8 +34,8 @@ function decrypt(text: string) {
 const app = new Hono();
 const prisma = new PrismaClient();
 
-console.log('Matrix Intelligence initialization. System model:', process.env.GEMINI_MODEL || 'gemini-1.5-flash');
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+console.log('Matrix Intelligence initialization. System model:', process.env.VITE_GEMINI_MODEL || 'gemini-1.5-flash');
+const genAI = new GoogleGenerativeAI(process.env.VITE_GEMINI_API_KEY || '');
 
 app.use('/api/*', cors({
     origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
@@ -270,7 +270,7 @@ app.put('/api/reviews/:id/regenerate', async (c) => {
 
     try {
         const model = genAI.getGenerativeModel({
-            model: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
+            model: process.env.VITE_GEMINI_MODEL || 'gemini-1.5-flash',
             systemInstruction: 'You are an itemized cost estimator. Reply only in valid JSON arrays containing objects with `item` (string) and `cost` (number).'
         });
         const prompt = `Based on these hotel audit findings, estimate realistic remediation line items and costs. Findings: "${review.findings}". Department: ${review.department}`;
@@ -322,7 +322,7 @@ app.post('/api/chat', async (c) => {
     try {
         const verityDoc = readFileSync(join(process.cwd(), 'public', 'verity.txt'), 'utf-8');
         const model = genAI.getGenerativeModel({
-            model: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
+            model: process.env.VITE_GEMINI_MODEL || 'gemini-1.5-flash',
             systemInstruction: `You are the VERITY Intelligence Liaison. Answer ONLY based on this documentation:\n\n${verityDoc}\n\nIf the answer is not in the documentation, politely state that your matrix is only authorized to discuss VERITY operational parameters.`
         });
 

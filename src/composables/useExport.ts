@@ -20,7 +20,7 @@ export function useExport() {
         if (endDate) queryParams.append('endDate', endDate);
 
         try {
-            const res = await fetch(`http://localhost:3000/api/reviews?${queryParams.toString()}`);
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/reviews?${queryParams.toString()}`);
             const { data } = await res.json();
             const dateStamp = new Date().toISOString().split('T')[0];
 

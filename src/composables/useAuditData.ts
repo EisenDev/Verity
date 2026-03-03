@@ -37,7 +37,7 @@ export function useAuditData() {
                 if (filters.mode) queryParams.append('mode', filters.mode);
             }
 
-            const res = await fetch(`http://localhost:3000/api/reviews?${queryParams.toString()}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/reviews?${queryParams.toString()}`, {
                 headers: {
                     'X-User-ID': user?.id || ''
                 }
@@ -75,7 +75,7 @@ export function useAuditData() {
         const userStr = sessionStorage.getItem('user');
         const user = userStr ? JSON.parse(userStr) : null;
 
-        const res = await fetch(`http://localhost:3000/api/reviews/${id}/regenerate`, {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/reviews/${id}/regenerate`, {
             method: 'PUT',
             headers: { 'X-User-ID': user?.id || '' }
         });
@@ -91,7 +91,7 @@ export function useAuditData() {
         const userStr = sessionStorage.getItem('user');
         const user = userStr ? JSON.parse(userStr) : null;
 
-        const res = await fetch(`http://localhost:3000/api/reviews/${id}/items`, {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/reviews/${id}/items`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

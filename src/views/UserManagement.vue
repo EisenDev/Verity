@@ -54,7 +54,7 @@ const openPasswordModal = async (user: ManagedUser) => {
     // Auto-decode for admin oversight
     isDecoding.value = true;
     try {
-        const res = await fetch(`http://localhost:3000/api/users/${user.id}/decode`);
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/users/${user.id}/decode`);
         const json = await res.json();
         decodedPassword.value = json.password;
     } catch (e) {
@@ -67,7 +67,7 @@ const openPasswordModal = async (user: ManagedUser) => {
 const fetchUsers = async () => {
     loading.value = true;
     try {
-        const res = await fetch('http://localhost:3000/api/users');
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/users`);
         const json = await res.json();
         users.value = json.data;
     } catch (e) {
@@ -80,7 +80,7 @@ const fetchUsers = async () => {
 const toggleStatus = async (user: ManagedUser) => {
     const newStatus = user.status === 'active' ? 'suspended' : 'active';
     try {
-        const res = await fetch(`http://localhost:3000/api/users/${user.id}/status`, {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/users/${user.id}/status`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: newStatus })
@@ -94,7 +94,7 @@ const commitPasswordReset = async () => {
     
     isSavingPass.value = true;
     try {
-        const res = await fetch(`http://localhost:3000/api/users/${selectedUser.value.id}/reset-password`, {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/users/${selectedUser.value.id}/reset-password`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ password: newPassword.value })

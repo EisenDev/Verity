@@ -56,7 +56,7 @@ const handleLogout = () => {
 
 const loadAnalytics = async () => {
   try {
-    const res = await fetch('http://localhost:3000/api/analytics');
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/analytics`);
     const json = await res.json();
     data.value = json.data || [];
     sentiments.value = json.sentiments || [];

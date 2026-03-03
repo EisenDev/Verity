@@ -15,7 +15,7 @@ function encrypt(text: string) {
 }
 
 const prisma = new PrismaClient();
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+const genAI = new GoogleGenerativeAI(process.env.VITE_GEMINI_API_KEY || '');
 
 type Department = 'Housekeeping' | 'Maintenance' | 'F&B';
 type Sentiment = 'positive' | 'neutral' | 'negative';
@@ -39,7 +39,7 @@ async function generateWithAI(): Promise<AItemplate[]> {
     console.log('Interfacing with Intelligence Matrix (Gemini)... Building templates...');
     try {
         const model = genAI.getGenerativeModel({
-            model: 'gemini-1.5-flash',
+            model: process.env.VITE_GEMINI_MODEL || 'gemini-1.5-flash',
             systemInstruction: 'You are a hotel inspector system. You reply ONLY in raw valid JSON arrays.'
         });
         const prompt = `Generate a JSON array of 30 distinct, highly detailed hotel audit findings.Each object must have:
