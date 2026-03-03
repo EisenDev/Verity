@@ -1,3 +1,5 @@
+While the assessment focused on a data table, an enterprise B2B dashboard cannot exist in a vacuum. I chose to implement a Sovereign Architecture that includes a secure login gateway and an AI-assisted liaison. This ensures that the RBAC (Role-Based Access Control) and Heuristic Tagging requirements are not just visual mocks, but part of a functional, maintainable ecosystem ready for production.
+
 # VERITY - Sovereign Operational Intelligence
 
 VERITY is a high-end, military-grade B2B SaaS architecture designed for luxury hospitality auditing and forensics. It provides a state-of-the-art interface for managing operational risk, ensuring data integrity through a strictly enforced Role-Based Access Control (RBAC) system, and automating remediation costing via the **Intelligence Liaison (Gemini AI)**.
@@ -14,11 +16,6 @@ The **Intelligence Liaison** is a context-aware AI matrix grounded in custom org
 
 ### 3. Automated Remediation Estimator
 Leveraging the **AI Cost Matrix**, VERITY automatically generates itemized remediation lists (e.g., "Broken Bed Frame - $500") based on raw audit findings, significantly reducing manual overhead for department managers.
-
-## 🚀 Vision and Design Philosophy
-While the core task focused on the data table, I chose to implement a Login gate and an AI Support layer because, in a real enterprise B2B environment, data transparency (RBAC) and user onboarding (AI Liaison) are not 'extras'—they are fundamental architectural requirements.
-
-VERITY isn't just a dashboard; it's an **Operating System for Hospitality Excellence**.
 
 ---
 *© 2026 EISENDEV. ALL RIGHTS RESERVED.*
