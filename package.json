@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "db:push": "prisma db push",
     "db:seed": "node --import tsx prisma/seed.ts",
-    "start": "node --import tsx server/index.ts",
+    "start": "npm run build && node --import tsx server/index.ts",
     "postinstall": "prisma generate",
     "server": "node --import tsx server/index.ts"
   },
