@@ -8,7 +8,6 @@ const filters = defineModel<AuditFilters>('filters', { required: true });
 
 const departments: ('All' | Department)[] = ['All', 'Housekeeping', 'Maintenance', 'F&B'];
 const sentiments: ('all' | Sentiment)[] = ['all', 'positive', 'neutral', 'negative'];
-const ratings = [null, 1, 2, 3, 4, 5];
 </script>
 
 <template>

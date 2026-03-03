@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import type { AuditRecord, AuditRole } from '../types/audit';
 import { AlertTriangle, AlertCircle } from 'lucide-vue-next';
 

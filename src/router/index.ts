@@ -54,7 +54,7 @@ const router = createRouter({
 });
 
 // Basic auth guard (checking a cookie naively for demonstration)
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
     const isAuth = document.cookie.includes('auth_token');
     const userStr = sessionStorage.getItem('user');
     const user = userStr ? JSON.parse(userStr) : null;

@@ -2,20 +2,16 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { 
-  Users, 
   ShieldCheck, 
   UserPlus, 
   Search, 
-  MoreVertical, 
   Ban, 
   CheckCircle, 
   Trash2, 
   Key,
   LogOut,
   Eye,
-  EyeOff,
-  ChevronLeft,
-  ChevronRight
+  EyeOff
 } from 'lucide-vue-next';
 import Sidebar from '../components/Sidebar.vue';
 
