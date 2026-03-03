@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import { LogOut, Activity } from 'lucide-vue-next';
 import Sidebar from '../components/Sidebar.vue';
 import AiLiaison from '../components/AiLiaison.vue';
+import { getApiBase } from '../utils/api';
 import {
   Chart as ChartJS,
   Title,
@@ -56,7 +57,7 @@ const handleLogout = () => {
 
 const loadAnalytics = async () => {
   try {
-    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/analytics`);
+    const res = await fetch(`${getApiBase()}/api/analytics`);
     const json = await res.json();
     data.value = json.data || [];
     sentiments.value = json.sentiments || [];

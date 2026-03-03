@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { ShieldAlert, LogIn, ShieldCheck, User as UserIcon, Mail, Lock } from 'lucide-vue-next';
+import { getApiBase } from '../utils/api';
 
 const router = useRouter();
 const loading = ref(false);
@@ -24,7 +25,7 @@ const login = async (email?: string, password?: string) => {
   }
   
   try {
-    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/login`, {
+    const res = await fetch(`${getApiBase()}/api/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: targetEmail, password: targetPassword })
