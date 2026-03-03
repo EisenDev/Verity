@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "db:push": "prisma db push",
     "db:seed": "node --import tsx prisma/seed.ts",
-    "start": "npx prisma generate && node --import tsx server/index.ts",
+    "start": "node --import tsx server/index.ts",
     "postinstall": "prisma generate",
     "server": "node --import tsx server/index.ts"
   },
@@ -20,10 +20,7 @@
     "@google/generative-ai": "^0.24.1",
     "@hono/node-server": "^1.19.10",
     "@prisma/client": "^5.22.0",
-    "@tailwindcss/vite": "^4.2.1",
     "@types/node": "^24.10.1",
-    "@vitejs/plugin-vue": "^6.0.2",
-    "@vue/tsconfig": "^0.8.1",
     "chart.js": "^4.5.1",
     "dotenv": "^17.3.1",
     "hono": "^4.12.4",
@@ -31,15 +28,19 @@
     "jspdf-autotable": "^5.0.7",
     "lucide-vue-next": "^0.576.0",
     "prisma": "^5.22.0",
-    "tailwindcss": "^4.2.1",
     "tsx": "^4.21.0",
-    "typescript": "~5.9.3",
-    "vite": "^7.3.1",
     "vue": "^3.5.25",
     "vue-chartjs": "^5.3.3",
     "vue-router": "^4.6.4",
-    "vue-tsc": "^3.1.5",
     "xlsx": "^0.18.5"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.1",
+    "@vitejs/plugin-vue": "^6.0.2",
+    "@vue/tsconfig": "^0.8.1",
+    "tailwindcss": "^4.2.1",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.1",
+    "vue-tsc": "^3.1.5"
+  }
 }
