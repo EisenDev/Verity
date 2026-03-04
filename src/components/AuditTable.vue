@@ -72,7 +72,7 @@ const getWarningTags = (record: AuditRecord) => {
             v-for="record in data" 
             :key="record.id"
             @click="emit('row-click', record)"
-            class="transition-colors hover:bg-slate-800/40 group group-hover:cursor-pointer"
+            class="transition-colors hover:bg-slate-800/40 cursor-pointer"
           >
             <td class="whitespace-nowrap px-6 py-4">
               <div class="font-mono text-xs text-slate-500">{{ record.id.split('-')[0] }}</div>

@@ -1,5 +1,6 @@
 import { unref, type MaybeRef } from 'vue';
 import type { AuditFilters } from './useAuditData';
+import { getApiBase } from '../utils/api';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as xlsx from 'xlsx';
@@ -16,11 +17,11 @@ export function useExport() {
         if (activeFilters.sentiment && activeFilters.sentiment !== 'all') queryParams.append('sentiment', activeFilters.sentiment);
         if (activeFilters.search) queryParams.append('search', activeFilters.search);
         if (activeFilters.mode) queryParams.append('mode', activeFilters.mode);
-        if (startDate) queryParams.append('startDate', startDate);
-        if (endDate) queryParams.append('endDate', endDate);
+        if (startDate) queryParams.append('dateFrom', startDate);
+        if (endDate) queryParams.append('dateTo', endDate);
 
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/reviews?${queryParams.toString()}`);
+            const res = await fetch(`${getApiBase()}/api/reviews?${queryParams.toString()}`);
             const { data } = await res.json();
             const dateStamp = new Date().toISOString().split('T')[0];
 

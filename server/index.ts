@@ -103,8 +103,9 @@ app.get('/api/reviews', async (c) => {
     const rating = c.req.query('rating');
     const sentiment = c.req.query('sentiment');
     const search = c.req.query('search');
-    const dateFrom = c.req.query('dateFrom');
-    const dateTo = c.req.query('dateTo');
+    const dateFrom = c.req.query('dateFrom') || c.req.query('startDate');
+    const dateTo = c.req.query('dateTo') || c.req.query('endDate');
+    const mode = c.req.query('mode');
     const where: any = {};
     if (department && department !== 'All') where.department = department;
     if (rating) where.rating = parseInt(rating);
@@ -124,6 +125,16 @@ app.get('/api/reviews', async (c) => {
             where.timestamp.lte = end;
         }
     }
+    // TRIAGE MODE: only show negative+rating1 (Critical) OR negative+rating5 (Discrepancy)
+    if (mode === 'triage') {
+        where.AND = [
+            { sentiment: 'negative' },
+            { rating: { in: [1, 5] } }
+        ];
+        // Remove individual sentiment/rating filters when triage is active
+        delete where.sentiment;
+        delete where.rating;
+    }
     const [total, data, aggregations, negCount] = await Promise.all([
         prisma.review.count({ where }),
         prisma.review.findMany({ where, skip: (page - 1) * pageSize, take: pageSize, orderBy: { timestamp: 'desc' } }),
@@ -139,10 +150,29 @@ app.put('/api/reviews/:id/regenerate', async (c) => {
     if (!review) return c.json({ error: 'Not found' }, 404);
     try {
         const model = genAI.getGenerativeModel({ model: process.env.VITE_GEMINI_MODEL || 'gemini-1.5-flash' });
-        const result = await model.generateContent(`Estimate itemized remediation costs for: "${review.findings}"`);
-        const updated = await prisma.review.update({ where: { id }, data: { remediation_cost: 150 } });
+        const prompt = `You are a hospitality remediation cost estimator. Based on the following audit finding, generate a realistic itemized cost breakdown. Respond ONLY with valid JSON in this exact format, no extra text:
+{"items": [{"item": "Description of work", "cost": 150}, {"item": "Another item", "cost": 75}]}
+
+Audit finding: "${review.findings}"`;
+        const result = await model.generateContent(prompt);
+        const rawText = result.response.text().trim();
+        // Strip markdown code blocks if present
+        const jsonStr = rawText.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
+        const parsed = JSON.parse(jsonStr);
+        const lineItems: { item: string; cost: number }[] = parsed.items || [];
+        const totalCost = lineItems.reduce((sum, item) => sum + (Number(item.cost) || 0), 0);
+        const updated = await prisma.review.update({
+            where: { id },
+            data: {
+                remediation_cost: totalCost,
+                line_items: lineItems as any
+            }
+        });
         return c.json({ success: true, data: updated });
-    } catch (e) { return c.json({ error: 'AI Matrix failed' }, 500); }
+    } catch (e) {
+        console.error('Regenerate failed:', e);
+        return c.json({ error: 'AI Matrix failed' }, 500);
+    }
 });
 
 app.post('/api/chat', async (c) => {
@@ -160,9 +190,36 @@ app.get('/api/analytics', async (c) => {
         const agg = await prisma.review.aggregate({
             where: { department: dept }, _avg: { rating: true }, _count: { id: true }, _sum: { remediation_cost: true }
         });
-        return { department: dept, averageRating: agg._avg.rating || 0, totalAudits: agg._count.id, totalRemediationCost: Number(agg._sum.remediation_cost) || 0 };
+        const negCount = await prisma.review.count({ where: { department: dept, sentiment: 'negative' } });
+        return { department: dept, averageRating: agg._avg.rating || 0, totalAudits: agg._count.id, negativeAudits: negCount, totalRemediationCost: Number(agg._sum.remediation_cost) || 0 };
     }));
-    return c.json({ data: performance });
+
+    // Sentiment breakdown for pie chart
+    const sentimentGroups = await prisma.review.groupBy({
+        by: ['sentiment'],
+        _count: { id: true }
+    });
+    const sentiments = sentimentGroups.map(g => ({ sentiment: g.sentiment, count: g._count.id }));
+
+    // Timeline: audits per day for the last 30 days
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const timelineRaw = await prisma.review.findMany({
+        where: { timestamp: { gte: thirtyDaysAgo } },
+        select: { timestamp: true, sentiment: true },
+        orderBy: { timestamp: 'asc' }
+    });
+    const timelineMap = new Map<string, { total: number; negative: number }>();
+    for (const r of timelineRaw) {
+        const day = r.timestamp.toISOString().split('T')[0];
+        if (!timelineMap.has(day)) timelineMap.set(day, { total: 0, negative: 0 });
+        const entry = timelineMap.get(day)!;
+        entry.total++;
+        if (r.sentiment === 'negative') entry.negative++;
+    }
+    const timeline = Array.from(timelineMap.entries()).map(([date, val]) => ({ date, ...val }));
+
+    return c.json({ data: performance, sentiments, timeline });
 });
 
 // SERVE FRONTEND (Azure Monolith)
