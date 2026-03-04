@@ -103,6 +103,8 @@ app.get('/api/reviews', async (c) => {
     const rating = c.req.query('rating');
     const sentiment = c.req.query('sentiment');
     const search = c.req.query('search');
+    const dateFrom = c.req.query('dateFrom');
+    const dateTo = c.req.query('dateTo');
     const where: any = {};
     if (department && department !== 'All') where.department = department;
     if (rating) where.rating = parseInt(rating);
@@ -112,6 +114,15 @@ app.get('/api/reviews', async (c) => {
             { findings: { contains: search, mode: 'insensitive' } },
             { inspector: { contains: search, mode: 'insensitive' } }
         ];
+    }
+    if (dateFrom || dateTo) {
+        where.timestamp = {};
+        if (dateFrom) where.timestamp.gte = new Date(dateFrom);
+        if (dateTo) {
+            const end = new Date(dateTo);
+            end.setHours(23, 59, 59, 999);
+            where.timestamp.lte = end;
+        }
     }
     const [total, data, aggregations, negCount] = await Promise.all([
         prisma.review.count({ where }),

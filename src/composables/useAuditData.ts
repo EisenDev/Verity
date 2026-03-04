@@ -8,6 +8,8 @@ export interface AuditFilters {
     sentiment?: Sentiment | 'all';
     search?: string;
     mode?: 'triage';
+    dateFrom?: string;
+    dateTo?: string;
 }
 
 export function useAuditData() {
@@ -34,6 +36,8 @@ export function useAuditData() {
                 if (filters.sentiment && filters.sentiment !== 'all') queryParams.append('sentiment', filters.sentiment);
                 if (filters.search) queryParams.append('search', filters.search);
                 if (filters.mode) queryParams.append('mode', filters.mode);
+                if (filters.dateFrom) queryParams.append('dateFrom', filters.dateFrom);
+                if (filters.dateTo) queryParams.append('dateTo', filters.dateTo);
             }
 
             const res = await fetch(`${getApiBase()}/api/reviews?${queryParams.toString()}`, {

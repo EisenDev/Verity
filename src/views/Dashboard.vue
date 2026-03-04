@@ -22,7 +22,9 @@ const filters = ref<AuditFilters>({
   department: 'All',
   rating: null,
   sentiment: 'all',
-  search: ''
+  search: '',
+  dateFrom: '',
+  dateTo: ''
 });
 
 const currentData = ref<AuditRecord[]>([]);

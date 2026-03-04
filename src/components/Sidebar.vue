@@ -32,9 +32,7 @@ const navItems = computed(() => {
     <!-- Branding -->
     <div class="h-16 flex items-center px-6 border-b border-slate-800 flex-shrink-0">
       <div class="flex items-center gap-3">
-        <div class="p-1.5 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
-          <ShieldAlert class="w-5 h-5 text-emerald-400" />
-        </div>
+        <img src="/logo.png" alt="VERITY Logo" class="w-8 h-8 rounded-lg object-cover shadow-[0_0_12px_rgba(16,185,129,0.3)]" />
         <div>
           <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
             VERITY
